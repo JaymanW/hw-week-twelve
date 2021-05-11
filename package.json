@@ -1,0 +1,24 @@
+{
+  "name": "hw-week-twelve",
+  "version": "1.0.0",
+  "description": "Homework assignment for week twelve of UofM Full Stack Web Development Bootcamp.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JaymanW/hw-week-twelve.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JaymanW/hw-week-twelve/issues"
+  },
+  "homepage": "https://github.com/JaymanW/hw-week-twelve#readme",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}

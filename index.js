@@ -40,8 +40,28 @@ const generateMenu = () => {
                         }
                     }
                 )
-            } else if (data.positionSelect === "View All Employees By Role") {
-                
+            } else if (data.menuItem === "View Roles") {
+                connection.query(
+                    "SELECT title AS Roles FROM role",
+                    function(err, res) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.table(res);
+                        }
+                    }
+                )
+            } else if (data.menuItem === "View Departments") {
+                connection.query(
+                    "SELECT name AS Departments FROM department",
+                    function(err, res) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.table(res);
+                        }
+                    }
+                )
             }
         })
 }

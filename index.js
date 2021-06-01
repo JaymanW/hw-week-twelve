@@ -9,23 +9,6 @@ const connection = mysql.createConnection({
     database: "employeedb"
 })
 
-// const getRoles = () => {
-//     connection.query(
-//         "SELECT title FROM role",
-//         function(err, res) {
-//             if (err) {
-//                 console.log(err);
-//             } else {
-//                 console.log(rolesArray);
-//                 return res.map(role => {
-//                     rolesArray.push(role.title);
-//                 })
-               
-//             }
-//         }
-//     )
-// }
-
 const menu = [
     {
         type: "list",
@@ -119,13 +102,65 @@ const generateMenu = () => {
                             connection.query(
                                 "INSERT INTO employee (first_name, last_name, role_id) VALUES ('" + employeeFirstName + "', '" + employeeLastName + "', (SELECT rID FROM role WHERE title = '" + employeeRole + "'))",
                                 (err, res) => {
-                                    console.log("Employee added!")
+                                    console.log("Employee added!");
                                     generateMenu();
                                 }
                             )
                         })
                     }
                 )
+            } else if (data.menuItem === "Add Role") {
+                connection.query(
+                    "SELECT name FROM department",
+                    (err, res) => {
+                        let departments = [];
+                        res.map(department => {
+                            departments.push(department.name)
+                        });
+                        inquirer.prompt([
+                            {
+                                type: 'input',
+                                name: 'role',
+                                message: 'Enter new role name.'
+                            },
+                            {
+                                type: 'list',
+                                name: 'department',
+                                message: 'Select which department the new role belongs to.',
+                                choices: departments
+                            }
+                        ])
+                        .then(res => {
+                            const roleName = res.role;
+                            const roleDepartment = res.department;
+                            connection.query(
+                                "INSERT INTO role (title, department_id) VALUES ('" + roleName + "', (SELECT dID FROM department WHERE name = '" + roleDepartment + "'))",
+                                (err, res) => {
+                                    console.log("Role added!");
+                                    generateMenu();
+                                }
+                            )
+                        })
+                    }
+                )
+            } else if (data.menuItem === "Add Department") {
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'departmentName',
+                        message: 'Enter new department name.'
+                    }
+                ])
+                .then(res => {
+                    const departmentName = res.departmentName;
+                    connection.query(
+                        "INSERT INTO department (name) VALUE ('" + departmentName + "')",
+                        (err, res) => {
+                            console.log("Department added.")
+                            generateMenu();
+                        }
+                    )
+                })
             }
         })
 }

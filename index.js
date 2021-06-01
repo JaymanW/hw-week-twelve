@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "",
-    database: "employeeDB"
+    database: "employeedb"
 })
 
 const menu = [
@@ -16,8 +16,8 @@ const menu = [
         message: "What would you like to do?",
         choices: [
             "View All Employees",
-            "View All Employees By Role",
-            "View All Employees By Department",
+            "View Roles",
+            "View Departments",
             "Add Employee",
             "Add Role",
             "Add Department",
@@ -31,11 +31,13 @@ const generateMenu = () => {
         .then(data => {
             if (data.menuItem === "View All Employees") {
                 connection.query(
-                    
-                    (err, res) => {
-                        // console.table(res);
-                        // generateMenu();
-                        console.log(res);
+                    "SELECT employee.eID AS Employee_ID, CONCAT(employee.first_name, ' ', employee.last_name) AS Employee, title AS Role, name AS Department FROM employee LEFT JOIN role ON role.rID = employee.role_id LEFT JOIN department ON department.dID = role.department_id",
+                    function(err, res) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.table(res);
+                        }
                     }
                 )
             } else if (data.positionSelect === "View All Employees By Role") {
@@ -48,4 +50,7 @@ const startup = () => {
     generateMenu();
 }
 
-startup();
+connection.connect(err => {
+    console.log(`Connected as ID: ${connection.threadId}`);
+    startup();
+})

@@ -215,6 +215,8 @@ const generateMenu = () => {
                         })
                     }
                 )
+            } else if (data.menuItem === "Finished") {
+                console.log("Thanks for using this application, see you next time!")
             }
         })
 }

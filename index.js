@@ -21,7 +21,8 @@ const menu = [
             "Add Employee",
             "Add Role",
             "Add Department",
-            "Update Employee Roles"
+            "Update Employee Roles",
+            "Finished"
         ]
     }
 ];
@@ -161,6 +162,59 @@ const generateMenu = () => {
                         }
                     )
                 })
+            } else if (data.menuItem === "Update Employee Roles") {
+                connection.query(
+                    "SELECT first_name, last_name FROM employee",
+                    (err, res) => {
+                        let employees = [];
+                        res.map(employee => {
+                            employees.push(`${employee.first_name} ${employee.last_name}`)
+                        });
+                        inquirer.prompt([
+                            {
+                                type: 'list',
+                                name: 'employeeList',
+                                message: 'Select employee to update their role.',
+                                choices: employees
+                            }
+                        ])
+                        .then(res => {
+                            const employeeName = res.employeeList.split(` `);
+                            connection.query(
+                                "SELECT title FROM role",
+                                (err, res) => {
+                                    let roles = [];
+                                    res.map(role => {
+                                        roles.push(role.title);
+                                    })
+                                    inquirer.prompt([
+                                        {
+                                            type: 'list',
+                                            name: 'employeeRole',
+                                            message: `Select a new role for ${employeeName[0]} ${employeeName[1]}`,
+                                            choices: roles
+                                        }
+                                    ])
+                                    .then(res => {
+                                        const employeeFirstName = employeeName[0];
+                                        const employeeLastName = employeeName[1];
+                                        const updatedEmployeeRole = res.employeeRole;
+
+                                        connection.query(
+                                            "UPDATE employee SET role_id = (SELECT rID FROM role WHERE title = '" + updatedEmployeeRole + "') WHERE first_name = '" + employeeFirstName + "' AND last_name = '" + employeeLastName + "' ",
+                                            (err, res) => {
+                                                console.log(`Updated ${employeeFirstName} ${employeeLastName}'s role successfully.`);
+                                                generateMenu();
+                                            }
+                                        )
+                                    })
+
+                                    
+                                }
+                            )
+                        })
+                    }
+                )
             }
         })
 }

@@ -1,10 +1,10 @@
-![Project Demo](./hwWeekElevenDemo.PNG)
-
-  # hw-week-twelve
+# hw-week-twelve
   
   ## Project Description
 
   This project is a simple employee tracker utilizing back-end technologies including JavaScript, node.js, npm, and mysql. After a quick installation, you can run this app locally via a terminal.
+  
+  A video walkthrough of setup and usage of this application can be viewed at: https://youtu.be/ofM1T7O-3xo
 
   ## Table of Contents
 
